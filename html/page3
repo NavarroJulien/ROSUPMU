@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#10121d">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Hasard Game">
+<title>HASARD GAME</title>
+<style>
+:root{color-scheme:dark;--bg:#10121d;--panel:#1a1d2b;--panel2:#222638;--line:#30364d;--text:#f5f6ff;--muted:#9ba3bd;--a:#a78bfa;--b:#62d6c5;--gold:#ffd166;--danger:#ff718b}
+*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;overscroll-behavior:none}body{padding:env(safe-area-inset-top) 0 env(safe-area-inset-bottom);overflow:hidden}
+.app{height:100dvh;display:flex;flex-direction:column;max-width:700px;margin:auto;background:radial-gradient(ellipse at 50% -10%,#282447 0,transparent 55%),var(--bg)}
+header{padding:15px 20px 12px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #ffffff0c;flex-shrink:0}
+.brand{font-size:17px;font-weight:900;letter-spacing:2px}.brand span{color:var(--a)}.sub{font-size:10px;color:var(--muted);letter-spacing:1.5px;margin-top:3px}.status{font-size:10px;color:var(--b);border:1px solid #62d6c54a;border-radius:30px;padding:7px 10px;letter-spacing:1px}
+main{flex:1;overflow-y:auto;padding:20px 18px 24px;scrollbar-width:none}main::-webkit-scrollbar{display:none}.screen{display:none;min-height:100%;animation:fade .22s ease}.screen.active{display:flex;flex-direction:column}@keyframes fade{from{opacity:.25;transform:translateY(5px)}to{opacity:1;transform:none}}
+.eyebrow{color:var(--a);font-size:10px;letter-spacing:2px;font-weight:800;text-transform:uppercase}.heading{font-size:27px;font-weight:850;letter-spacing:-.7px;margin:5px 0 5px}.desc{font-size:13px;color:var(--muted);margin:0 0 22px;line-height:1.45}
+.panel{background:linear-gradient(145deg,#22263a,#191c2a);border:1px solid var(--line);border-radius:20px;padding:17px;margin-bottom:14px;box-shadow:0 12px 35px #0002}.panel-title{font-size:11px;color:var(--muted);letter-spacing:1.3px;text-transform:uppercase;font-weight:800;margin-bottom:13px}
+label{display:block;font-size:12px;color:var(--muted);margin:0 0 7px}input,select{width:100%;border:1px solid var(--line);background:#111421;color:var(--text);border-radius:12px;padding:13px;font-size:16px;outline:none;min-width:0}input:focus,select:focus{border-color:var(--a)}.fields{display:grid;grid-template-columns:1fr 1fr;gap:11px;margin-bottom:14px}
+button{border:0;color:#171326;background:linear-gradient(100deg,var(--a),#c4a8ff);font-size:15px;font-weight:850;border-radius:14px;padding:15px 18px;width:100%;cursor:pointer;box-shadow:0 7px 22px #a78bfa25;transition:transform .12s,filter .12s}button:active{transform:scale(.98);filter:brightness(1.1)}button.secondary{background:#2b3045;color:var(--text);border:1px solid #414863;box-shadow:none}button.small{width:auto;padding:9px 12px;font-size:12px;border-radius:10px}
+.result{min-height:155px;display:flex;align-items:center;justify-content:center;flex-direction:column;text-align:center;background:radial-gradient(circle at center,#39315f 0,#202238 55%,#1b1e2d 100%);border:1px solid #62548d;border-radius:22px;margin-bottom:14px;padding:20px;overflow:hidden}.result-label{font-size:10px;letter-spacing:2px;color:#c2b4f4;font-weight:800}.big-number{font-size:70px;font-weight:950;line-height:1.05;letter-spacing:-3px;margin:8px 0}.result-note{font-size:12px;color:var(--muted)}.history{display:flex;gap:8px;flex-wrap:wrap}.chip{background:#292e43;border:1px solid #3c435e;border-radius:11px;padding:10px 13px;font-size:16px;font-weight:800;min-width:45px;text-align:center}.empty{font-size:12px;color:var(--muted)}
+.dice-row{display:flex;gap:9px;justify-content:center;flex-wrap:wrap;margin:12px 0}.die{width:55px;height:55px;border-radius:14px;background:#f6f3ff;color:#242039;display:grid;place-items:center;font-size:29px;font-weight:900;box-shadow:0 5px 0 #b9b1d3;animation:pop .25s ease}.die.poly{font-size:20px}@keyframes pop{from{transform:rotate(-20deg) scale(.7)}to{transform:none}}
+.coin-wrap{height:180px;display:grid;place-items:center}.coin{width:112px;height:112px;border-radius:50%;display:grid;place-items:center;background:radial-gradient(circle at 35% 30%,#fff0b3,#e4a82f 60%,#95601a);border:7px solid #f5d16d;box-shadow:0 8px 0 #80521e,0 18px 30px #0005;color:#734719;font-size:20px;font-weight:950;text-shadow:0 1px #fff8}.coin.flip{animation:flip .85s cubic-bezier(.2,.8,.2,1)}@keyframes flip{0%{transform:rotateY(0) translateY(0)}35%{transform:rotateY(540deg) translateY(-35px)}70%{transform:rotateY(1080deg) translateY(-10px)}100%{transform:rotateY(1440deg) translateY(0)}}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:10px}.stat{padding:15px;border-radius:15px;background:#111522;border:1px solid var(--line);text-align:center}.stat strong{display:block;font-size:27px;margin-top:5px}.stat span{font-size:11px;color:var(--muted);letter-spacing:1px}.stat:first-child strong{color:var(--gold)}.stat:last-child strong{color:var(--b)}
+.option-list{display:flex;flex-direction:column;gap:8px;margin:12px 0}.option-row{display:flex;gap:8px;align-items:center}.option-row input{flex:1}.remove{width:40px;height:44px;padding:0;background:#3a2537;color:#ff9cac;box-shadow:none;border:1px solid #704052}
+.winner{font-size:clamp(23px,7vw,38px);font-weight:900;line-height:1.15;overflow-wrap:anywhere;margin:10px 0}
+.track{display:flex;flex-direction:column;gap:12px;margin:10px 0 18px}.lane{height:46px;position:relative;background:repeating-linear-gradient(90deg,#242a3b 0 25px,#2b3145 25px 27px);border:1px solid #3a425c;border-radius:12px;overflow:hidden}.horse{position:absolute;left:2px;top:4px;font-size:29px;transition:left 2.3s cubic-bezier(.12,.68,.18,1);filter:drop-shadow(0 3px 2px #0006)}.lane:after{content:"";position:absolute;right:10px;top:0;bottom:0;border-left:3px dashed #f3f0df99}.lane-label{position:absolute;left:9px;bottom:2px;font-size:8px;color:#ffffff80;z-index:2}
+.choices{display:flex;gap:8px;flex-wrap:wrap}.horse-choice{width:auto;padding:10px 14px;background:#2b3045;color:var(--text);border:1px solid #414863;box-shadow:none}.horse-choice.selected{background:#57458d;border-color:#b39aff}
+.oracle{display:flex;align-items:center;justify-content:center;gap:8px;min-height:190px;position:relative}.oracle img{width:135px;height:165px;object-fit:contain;object-position:center bottom;filter:drop-shadow(0 8px 12px #0006)}.bubble{position:relative;background:#f6f2ff;color:#211b35;border-radius:18px;padding:14px 17px;font-weight:950;font-size:25px;min-width:95px;text-align:center;box-shadow:0 7px 18px #0004;transform:rotate(2deg)}.bubble:after{content:"";position:absolute;left:-8px;bottom:17px;border-width:9px 10px 9px 0;border-style:solid;border-color:transparent #f6f2ff transparent transparent}.bubble.hidden{visibility:hidden}.bubble.pop{animation:bubble .35s ease}@keyframes bubble{from{transform:scale(.3) rotate(-10deg);opacity:0}to{transform:scale(1) rotate(2deg);opacity:1}}
+nav{flex-shrink:0;display:flex;gap:3px;overflow-x:auto;padding:9px 8px calc(9px + env(safe-area-inset-bottom));background:#151827;border-top:1px solid #ffffff12;scrollbar-width:none}nav::-webkit-scrollbar{display:none}.tab{flex:1;min-width:60px;display:flex;flex-direction:column;align-items:center;gap:5px;background:transparent;color:#8991aa;box-shadow:none;border:0;padding:7px 4px;font-size:9px;letter-spacing:.2px;border-radius:12px}.tab .ico{font-size:20px;line-height:1}.tab.active{background:#2c2943;color:#d6c9ff}.tab.active .ico{filter:drop-shadow(0 0 6px #b49aff)}
+.footer-note{text-align:center;color:#727b96;font-size:10px;margin-top:auto;padding:15px 0 2px}
+@media(min-width:600px){main{padding:28px 30px}.heading{font-size:32px}.panel{padding:20px}.result{min-height:180px}}
+</style>
+</head>
+<body>
+<div class="app">
+<header><div><div class="brand">HASARD <span>GAME</span></div><div class="sub">LA CHANCE EST DE TON CÔTÉ ?</div></div><div class="status">● 100% HASARD</div></header>
+<main>
+<section class="screen active" id="random">
+<div class="eyebrow">Jeu 01 · Tirage</div><div class="heading">Nombre au hasard</div><p class="desc">Définis une plage, puis laisse le hasard décider.</p>
+<div class="panel"><div class="panel-title">Paramètres du tirage</div><div class="fields"><div><label for="min">Valeur minimum</label><input id="min" type="number" value="1"></div><div><label for="max">Valeur maximum</label><input id="max" type="number" value="100"></div></div><button onclick="drawNumber()">Tirer un chiffre</button></div>
+<div class="result"><div class="result-label">RÉSULTAT DU TIRAGE</div><div class="big-number" id="numberResult">?</div><div class="result-note" id="numberNote">À toi de jouer</div></div>
+<div class="panel"><div class="panel-title">Les 3 derniers tirages</div><div class="history" id="numberHistory"><span class="empty">Aucun tirage pour le moment</span></div></div>
+</section>
+
+<section class="screen" id="dice">
+<div class="eyebrow">Jeu 02 · Dés</div><div class="heading">Lancer de dés</div><p class="desc">Choisis combien de dés lancer et leur nombre de faces.</p>
+<div class="panel"><div class="panel-title">Paramètres</div><div class="fields"><div><label for="diceCount">Nombre de dés</label><select id="diceCount"><option>1</option><option selected>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>8</option><option>10</option></select></div><div><label for="diceType">Type de dé</label><select id="diceType"><option value="4">D4 · 4 faces</option><option value="6" selected>D6 · 6 faces</option><option value="8">D8 · 8 faces</option><option value="10">D10 · 10 faces</option><option value="12">D12 · 12 faces</option><option value="20">D20 · 20 faces</option><option value="100">D100 · 100 faces</option></select></div></div><button onclick="rollDice()">Lancer les dés</button></div>
+<div class="result"><div class="result-label">RÉSULTAT</div><div class="dice-row" id="diceResult"><span class="empty">Les dés attendent ton lancer</span></div><div class="result-note" id="diceTotal">—</div></div>
+<div class="panel"><div class="panel-title">Historique des 3 derniers lancers</div><div class="history" id="diceHistory"><span class="empty">Aucun lancer pour le moment</span></div></div>
+</section>
+
+<section class="screen" id="coin">
+<div class="eyebrow">Jeu 03 · 50 / 50</div><div class="heading">Pile ou face</div><p class="desc">Une pièce, deux possibilités. À toi de la lancer !</p>
+<div class="panel" style="text-align:center"><div class="coin-wrap"><div class="coin" id="coinVisual">?</div></div><div class="result-note" id="coinResult">La pièce est en attente…</div><button style="margin-top:18px" onclick="flipCoin()">Lancer la pièce</button></div>
+<div class="panel"><div class="panel-title">Statistiques des lancers</div><div class="stats"><div class="stat"><span>PILE</span><strong id="heads">0</strong></div><div class="stat"><span>FACE</span><strong id="tails">0</strong></div></div><button class="secondary" style="margin-top:12px" onclick="resetCoin()">Réinitialiser les compteurs</button></div>
+</section>
+
+<section class="screen" id="roulette">
+<div class="eyebrow">Jeu 04 · Décision</div><div class="heading">La roulette</div><p class="desc">Ajoute tes options et laisse la roulette choisir pour toi.</p>
+<div class="panel"><div class="panel-title">Les options en jeu</div><div class="option-list" id="options"><div class="option-row"><input value="Option 1" aria-label="Option 1"><button class="remove" onclick="removeOption(this)" aria-label="Supprimer">×</button></div><div class="option-row"><input value="Option 2" aria-label="Option 2"><button class="remove" onclick="removeOption(this)" aria-label="Supprimer">×</button></div></div><div style="display:flex;gap:8px"><button class="secondary" onclick="addOption()">＋ Ajouter une option</button></div></div>
+<div class="result"><div class="result-label">LA ROULETTE A CHOISI</div><div class="winner" id="rouletteResult">?</div><div class="result-note" id="rouletteNote">Prêt à tenter ta chance ?</div></div><button onclick="spinRoulette()">Lancer la roulette</button>
+</section>
+
+<section class="screen" id="horses">
+<div class="eyebrow">Jeu 05 · Course</div><div class="heading">Course de chevaux</div><p class="desc">Choisis ton cheval. La course décidera si ton pari est gagnant !</p>
+<div class="panel"><div class="panel-title">Configuration de la course</div><label for="horseCount">Nombre de chevaux</label><select id="horseCount" onchange="setupHorses()"><option>2</option><option>3</option><option selected>4</option><option>5</option><option>6</option></select><div style="height:15px"></div><label>Quel cheval choisis-tu ?</label><div class="choices" id="horseChoices"></div></div>
+<div class="panel"><div class="panel-title">Sur la ligne de départ</div><div class="track" id="track"></div><button id="raceButton" onclick="startRace()">Lancer la course</button></div>
+<div class="result" style="min-height:110px"><div class="result-label">RÉSULTAT DE LA COURSE</div><div class="winner" id="raceResult" style="font-size:25px">À vos marques…</div><div class="result-note" id="raceNote">Sélectionne ton cheval et lance la course</div></div>
+</section>
+
+<section class="screen" id="oracle">
+<div class="eyebrow">Jeu 06 · La réponse</div><div class="heading">Oui ou non ?</div><p class="desc">Pose ta question dans ta tête… La réponse va apparaître.</p>
+<div class="panel"><div class="oracle"><img src="03CC5413-0DF2-4F43-AD29-CA91101F4463.png" alt="Personnage de l'oracle"><div class="bubble hidden" id="oracleBubble">OUI</div></div><button onclick="askOracle()">Demander</button></div>
+<div class="footer-note">Une chance sur deux. Le destin a parlé.</div>
+</section>
+</main>
+<nav aria-label="Choisir un jeu">
+<button class="tab active" data-screen="random" onclick="showScreen('random',this)"><span class="ico">🎲</span>Nombre</button>
+<button class="tab" data-screen="dice" onclick="showScreen('dice',this)"><span class="ico">⚄</span>Dés</button>
+<button class="tab" data-screen="coin" onclick="showScreen('coin',this)"><span class="ico">🪙</span>Pile/Face</button>
+<button class="tab" data-screen="roulette" onclick="showScreen('roulette',this)"><span class="ico">🎯</span>Roulette</button>
+<button class="tab" data-screen="horses" onclick="showScreen('horses',this)"><span class="ico">🏇</span>Chevaux</button>
+<button class="tab" data-screen="oracle" onclick="showScreen('oracle',this)"><span class="ico">🔮</span>Oui/Non</button>
+</nav>
+</div>
+<script>
+const $=id=>document.getElementById(id);
+function rand(max){return Math.floor(Math.random()*max)}
+function showScreen(id,btn){document.querySelectorAll('.screen').forEach(s=>s.classList.toggle('active',s.id===id));document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('active',t.dataset.screen===id));$(''+id).scrollTop=0}
+function updateHistory(id,items,format=x=>x){$(id).innerHTML=items.length?items.map(x=>`<span class="chip">${format(x)}</span>`).join(''):'<span class="empty">Aucun résultat pour le moment</span>'}
+let numberHistory=[];
+function drawNumber(){const min=Number($('min').value),max=Number($('max').value);if(!Number.isSafeInteger(min)||!Number.isSafeInteger(max)||max<min){$('numberNote').textContent='Entre deux nombres entiers valides (max ≥ min).';return}const n=min+rand(max-min+1);$('numberResult').textContent=n;$('numberNote').textContent=`Entre ${min} et ${max}`;numberHistory.unshift(n);numberHistory=numberHistory.slice(0,3);updateHistory('numberHistory',numberHistory)}
+let diceHistory=[];
+function rollDice(){const count=Number($('diceCount').value),faces=Number($('diceType').value);const values=Array.from({length:count},()=>1+rand(faces));$('diceResult').innerHTML=values.map(v=>`<div class="die ${faces>20?'poly':''}">${v}</div>`).join('');const total=values.reduce((a,b)=>a+b,0);$('diceTotal').textContent=`Total : ${total}`;diceHistory.unshift(`${values.join(' + ')} = ${total}`);diceHistory=diceHistory.slice(0,3);updateHistory('diceHistory',diceHistory)}
+let heads=0,tails=0;
+function flipCoin(){const coin=$('coinVisual');coin.classList.remove('flip');void coin.offsetWidth;const isHeads=Math.random()<.5;coin.textContent='…';coin.classList.add('flip');$('coinResult').textContent='La pièce tourne…';setTimeout(()=>{coin.textContent=isHeads?'PILE':'FACE';$('coinResult').textContent=isHeads?'C’est pile !':'C’est face !';if(isHeads)heads++;else tails++;$('heads').textContent=heads;$('tails').textContent=tails},850)}
+function resetCoin(){heads=0;tails=0;$('heads').textContent='0';$('tails').textContent='0';$('coinVisual').textContent='?';$('coinResult').textContent='Compteurs remis à zéro.'}
+function addOption(){const row=document.createElement('div');row.className='option-row';row.innerHTML='<input placeholder="Écris ton option" aria-label="Nouvelle option"><button class="remove" onclick="removeOption(this)" aria-label="Supprimer">×</button>';$('options').appendChild(row);row.querySelector('input').focus()}
+function removeOption(btn){if($('options').children.length<=2){$('rouletteNote').textContent='Garde au moins deux options.';return}btn.parentElement.remove()}
+function spinRoulette(){const values=[...$('options').querySelectorAll('input')].map(i=>i.value.trim()).filter(Boolean);if(values.length<2){$('rouletteNote').textContent='Ajoute au moins deux options non vides.';return}const result=$('rouletteResult');result.textContent='…';$('rouletteNote').textContent='La roulette tourne…';let ticks=0;const interval=setInterval(()=>{result.textContent=values[rand(values.length)];ticks++;if(ticks>=14){clearInterval(interval);result.textContent=values[rand(values.length)];$('rouletteNote').textContent='Le hasard a fait son choix.'}},95)}
+const horseEmojis=['🐎','🐴','🏇','🐎','🐴','🏇'];let chosenHorse=1,racing=false;
+function setupHorses(){const n=Number($('horseCount').value);chosenHorse=Math.min(chosenHorse,n);$('horseChoices').innerHTML=Array.from({length:n},(_,i)=>`<button class="horse-choice ${i+1===chosenHorse?'selected':''}" onclick="chooseHorse(${i+1})">${i+1}</button>`).join('');$('track').innerHTML=Array.from({length:n},(_,i)=>`<div class="lane"><span class="lane-label">CHEVAL ${i+1}</span><span class="horse" id="horse${i+1}">${horseEmojis[i]}</span></div>`).join('');$('raceResult').textContent='À vos marques…';$('raceNote').textContent=`Tu as choisi le cheval n°${chosenHorse}.`;$('raceButton').disabled=false;$('raceButton').style.opacity=1}
+function chooseHorse(n){if(racing)return;chosenHorse=n;document.querySelectorAll('.horse-choice').forEach((b,i)=>b.classList.toggle('selected',i+1===n));$('raceNote').textContent=`Tu as choisi le cheval n°${n}.`}
+function startRace(){if(racing)return;racing=true;const n=Number($('horseCount').value);$('raceButton').disabled=true;$('raceButton').style.opacity=.5;$('raceResult').textContent='C’est parti !';$('raceNote').textContent='La course est lancée…';const finish=Array.from({length:n},()=>65+rand(34));const winner=finish.indexOf(Math.max(...finish))+1;for(let i=1;i<=n;i++){const el=$('horse'+i);el.style.left='2px';requestAnimationFrame(()=>setTimeout(()=>{el.style.left=finish[i-1]+'%'},60))}setTimeout(()=>{$('raceResult').textContent=`${winner===chosenHorse?'🏆 Victoire !':'🐎 Cheval n°'+winner+' gagne'}`;$('raceNote').textContent=winner===chosenHorse?`Bravo, ton cheval n°${chosenHorse} a gagné !`:`Ton cheval n°${chosenHorse} a terminé derrière.`;racing=false;$('raceButton').disabled=false;$('raceButton').style.opacity=1},2500)}
+function askOracle(){const bubble=$('oracleBubble');bubble.classList.remove('hidden','pop');bubble.textContent=Math.random()<.5?'OUI':'NON';void bubble.offsetWidth;bubble.classList.add('pop')}
+setupHorses();
+</script>
+</body>
+</html>
